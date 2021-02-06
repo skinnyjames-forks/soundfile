@@ -10,29 +10,36 @@ describe SFile do
   int = Array(Int32).new
   float = Array(Float32).new
   double = Array(Float64).new
+  
 
-  it "is a Class" do
-    SFile.is_a?(Class).should eq(true)
-  end
+    it "Test File should open" do 
+      File.open(test_wav, "r") do |f|
+        f.fd.should_not eq(-1)
+      end
+    end
 
-  it "instantiates a new SFile class when passed no arguments" do
-    a.class.should eq(SFile)
-  end
+    it "is a Class" do
+      SFile.is_a?(Class).should eq(true)
+    end
 
-  it "can be passed a LibSndFile::SFInfo object on instantiation" do
-    b = SFile.new(a.info)
-    b.class.should eq(SFile)
-    b.info.should eq(a.info)
-    b.info.class.should eq(SFile.info.class)
-    b.close
+    it "instantiates a new SFile class when passed no arguments" do
+      a.class.should eq(SFile)
+    end
 
-    info = SFile.info
-    b = SFile.new(info)
-    b.class.should eq(SFile)
-    b.info.should eq(a.info)
-    b.close
-  end
+    it "can be passed a LibSndFile::SFInfo object on instantiation" do
+      b = SFile.new(a.info)
+      b.class.should eq(SFile)
+      b.info.should eq(a.info)
+      b.info.class.should eq(SFile.info.class)
+      b.close
 
+      info = SFile.info
+      b = SFile.new(info)
+      b.class.should eq(SFile)
+      b.info.should eq(a.info)
+      b.close
+    end
+  
   describe "#open" do
     it "returns false when opening a non-existing file for read" do
       a.open("invalid.wav", :read).should eq false
@@ -70,13 +77,16 @@ describe SFile do
   end
 
   describe "#open_fd" do
-    File.open(test_wav, "r") do |f|
-      it "can open a file given a file descriptor" do
+    it "can open a file given a file descriptor" do
+      File.open(test_wav, "r") do |f|
+        f.fd.should_not eq(-1)        
         a.open_fd(f.fd, :read).should be_true
         a.close
       end
+    end
 
-      it "can be invoked with a block" do
+    it "can be invoked with a block" do
+      File.open(test_wav, "r") do |f|
         a.open_fd(f.fd, :read) do |sf|
           sf.class.should eq SFile
           sf.info.class.should eq SFile.info.class
@@ -86,15 +96,16 @@ describe SFile do
   end
 
   describe "#open_file" do
-    File.open(test_wav, "r") do |f|
-      it "can open a file given a file object" do
+    it "can open a file given a file object" do
+      File.open(test_wav, "r") do |f|
         a.open_file(f, :read).should be_true
         a.close
       end
     end
 
-    File.open(test_wav, "r") do |f|
-      it "can be invoked with a block" do
+    it "can be invoked with a block" do
+      File.open(test_wav, "r") do |f|
+
         a.open_file(f, :read) do |sf|
           sf.class.should eq SFile
           sf.info.class.should eq SFile.info.class
