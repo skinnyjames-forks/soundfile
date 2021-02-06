@@ -12,33 +12,33 @@ describe SFile do
   double = Array(Float64).new
   
 
-    it "Test File should open" do 
-      File.open(test_wav, "r") do |f|
-        f.fd.should_not eq(-1)
-      end
+  it "Test File should open" do 
+    File.open(test_wav, "r") do |f|
+      f.fd.should_not eq(-1)
     end
+  end
 
-    it "is a Class" do
-      SFile.is_a?(Class).should eq(true)
-    end
+  it "is a Class" do
+    SFile.is_a?(Class).should eq(true)
+  end
 
-    it "instantiates a new SFile class when passed no arguments" do
-      a.class.should eq(SFile)
-    end
+  it "instantiates a new SFile class when passed no arguments" do
+    a.class.should eq(SFile)
+  end
 
-    it "can be passed a LibSndFile::SFInfo object on instantiation" do
-      b = SFile.new(a.info)
-      b.class.should eq(SFile)
-      b.info.should eq(a.info)
-      b.info.class.should eq(SFile.info.class)
-      b.close
+  it "can be passed a LibSndFile::SFInfo object on instantiation" do
+    b = SFile.new(a.info)
+    b.class.should eq(SFile)
+    b.info.should eq(a.info)
+    b.info.class.should eq(SFile.info.class)
+    b.close
 
-      info = SFile.info
-      b = SFile.new(info)
-      b.class.should eq(SFile)
-      b.info.should eq(a.info)
-      b.close
-    end
+    info = SFile.info
+    b = SFile.new(info)
+    b.class.should eq(SFile)
+    b.info.should eq(a.info)
+    b.close
+  end
   
   describe "#open" do
     it "returns false when opening a non-existing file for read" do
